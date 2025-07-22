@@ -2,140 +2,458 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>AppShop</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Application</title>
+    <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/102/102649.png">
     <style>
-        body, html {
+        :root {
+            --primary: #292e49;
+            --accent: #536976;
+            --highlight: #51c6e8;
+            --bg-card: #ffffffdd;
+            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            --radius: 19px;
+            --transition: 0.23s cubic-bezier(.6,.2,.4,1);
+        }
+        body {
+            min-height: 100vh;
             margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f9;
+            font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+            background: linear-gradient(135deg, #292e49 0%, #536976 100%);
+            color: #242424;
+            overflow-x: hidden;
         }
-
-        .iframe-container {
-            position: relative;
-            height: 100%;
-            width: 100%;
-        }
-
-        iframe {
-            height: 100%;
-            width: 100%;
-            border: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        .buttons {
-            position: absolute;
-            bottom: 3px; /* Adjusted value to position buttons lower */
-            left: 50%;
-            transform: translateX(-50%);
+        header {
+            padding: 20px 0 10px 0;
             display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: transparent;
+        }
+        .brand {
+            display: flex;
+            align-items: center;
             gap: 10px;
         }
-
-        .buttons button {
-            padding: 10px 20px;
-            font-size: 14px;
-            color: #ffffff;
-            background-color: #007bff;
-            border: none;
-            border-radius: 3px;
+        .brand-title {
+            font-size: 1.7rem;
+            font-weight: 700;
+            letter-spacing: .03em;
+            color: #fff;
+        }
+        .status {
+            min-width: 210px;
+            color: #fff;
+            background: linear-gradient(90deg,#51c6e877,#fff1 85%);
+            border-radius: 1em;
+            font-size: 1.07rem;
+            margin-left: 18px;
+            font-weight: 500;
+            padding:7px 25px;
+            box-shadow: 0 0 9px #292e4922;
+            transition: color 0.4s;
+            animation: fadeinmsg 1s;
+        }
+        @keyframes fadeinmsg {
+            from { opacity: 0; transform: translateY(-9px);}
+            to {opacity:1;transform: none;}
+        }
+        .bug-btn {
+            color: var(--highlight);
+            background: transparent;
+            padding: 6px 18px;
+            border: 1px solid var(--highlight);
+            border-radius: var(--radius);
             cursor: pointer;
-            transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            font-weight: 600;
+            margin-left: 29px;
+            font-size: 14px;
+            transition: var(--transition);
         }
-
-        .buttons button:hover {
-            background-color: #0056b3;
-            transform: translateY(-2px);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        .bug-btn:hover { background: var(--highlight); color: #fff }
+        .search-box {
+            flex: 1;
+            max-width: 350px;
+            margin-left: 24px;
         }
-
-        .buttons button:active {
-            background-color: #004494;
-            transform: translateY(0);
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        #search {
+            width: 100%;
+            font-size: 1rem;
+            padding: 10px 16px;
+            border-radius: 16px;
+            border: none;
+            outline: none;
+            background: #fff5;
+            color: #222;
+            font-weight: 500;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        #search:focus { background: #fff; }
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 32px;
+            margin: 40px auto 40px auto;
+            padding: 32px;
+            max-width: 1240px;
+        }
+        .app-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+            padding: 24px 12px 20px 12px;
+            transition: transform .18s cubic-bezier(.45,.5,.53,1), box-shadow .22s;
+            cursor: pointer;
+            position: relative;
+            min-height: 200px;
+            overflow: hidden;
+            border: 3px solid transparent;
+        }
+        .app-card:hover, .app-card:focus-within {
+            transform: translateY(-7px) scale(1.03);
+            box-shadow: 0 8px 32px 0 rgba(34,199,238,.17), 0 4px 12px 0 rgba(23,41,78,.14);
+            border: 3px solid var(--highlight);
+        }
+        .app-card img {
+            width: 74px; height: 74px;
+            border-radius: 18px;
+            background: #f7f9fa;
+            box-shadow: 0 2px 12px #0001;
+            margin-bottom: 13px;
+            transition: box-shadow .17s;
+            object-fit: cover;
+        }
+        .app-card:hover img { box-shadow: 0 7px 20px #3fd5fa3c; }
+        .app-card h3 {
+            margin: 11px 0 7px 0;
+            font-size: 1.11rem;
+            font-weight: 600;
+            color: #212d3e;
+        }
+        .app-card p {color:#5e637a;font-size:0.96rem;margin:0 0 0.3em 0;}
+        .animated-text {
+            animation: shade 1.1s ease-in-out alternate infinite;
+        }
+        @keyframes shade {
+            0% {color:#5293f7;}
+            100% {color:#51c6e8;}
+        }
+        .scroll-button {
+            position: fixed;
+            bottom: 26px;
+            right: 25px;
+            width: 54px; height: 54px;
+            padding: 0;
+            background: var(--highlight);
+            color: #fff;
+            border: none;
+            border-radius: 100%;
+            box-shadow: 0 4px 18px #51c6e838;
+            cursor: pointer;
+            transition: background .2s, transform .2s;
+            z-index: 100;
+            display:flex;align-items:center;justify-content:center;
+        }
+        .scroll-button:hover {
+            background: #373faf;
+            transform: scale(1.07);
+        }
+        .scroll-button svg {
+            width: 32px;
+            height: 32px;
+            display: block;
+            fill: #fff;
+        }
+        @media (max-width: 850px) {
+            .apps-grid { padding: 18px 7vw 24px 7vw; max-width: none;gap:18px;}
+            header { flex-direction: column;align-items:flex-start;gap:10px;}
+            .search-box { margin-left:0; width:100%;max-width:100%;}
+        }
+        @media (max-width: 500px) {
+            .brand-title {font-size:1.05rem}
+            .apps-grid { grid-template-columns:1fr 1fr; padding: 12px 1vw;}
+            .app-card {padding:13px 4px;min-height:unset;}
         }
     </style>
 </head>
 <body>
-    <div class="iframe-container">
-        <iframe src="./app.html" sandbox="allow-forms allow-modals allow-scripts allow-same-origin allow-downloads" allowfullscreen></iframe>
-        <div class="buttons">
-            <button id="saveButton" onclick="saveMainDataToFile()">Sauvegarder</button>
-            <button id="restoreButton" onclick="restoreMainDataFromFile()">Restaurer</button>
+    <header>
+        <div class="brand">
+            <span class="brand-title">Application</span>
+            <span class="status" id="dynamic-msg"></span>
+            <button class="bug-btn" onclick="window.location.href='./bug.html'">Proposer / Signaler un bug</button>
         </div>
+        <div class="search-box">
+            <input id="search" type="search" placeholder="Rechercher une application..." onkeyup="searchApps()">
+        </div>
+    </header>
+    <main>
+    <div class="apps-grid" id="apps-list">
+        <div class="app-card" onclick="window.open('thunderbrows.html','_blank')" tabindex="0">
+            <img src="./Logo apps/ThunderBrows.png" alt="ThunderBrows">
+            <h3>ThunderBrows</h3>
+            <p>Par ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('shuttlebrows.html','_blank')" tabindex="0">
+            <img src="./Logo apps/shuttleproxy.png" alt="ShuttleBrows">
+            <h3>ShuttleBrows</h3>
+            <p>Par Shuttle and on ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('./Logo apps/prog448987987778677876878678678678676fg8re7tber7gve873zrfn68ez87t.html','_blank')" tabindex="0">
+            <img src="./Logo apps/ICorrect.png" alt="iCorrect">
+            <h3>iCorrect</h3>
+            <p class="animated-text">Par Original ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('thunderbrows.html?baseUrl=my1','_blank')" tabindex="0">
+            <img src="./Logo apps/myinstants.png" alt="Myinstants">
+            <h3>Myinstants</h3>
+            <p>Par ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('thunderbrows.html?baseUrl=vm0d','_blank')" tabindex="0">
+            <img src="./Logo apps/voicemod.png" alt="Voicemod">
+            <h3>Voicemod</h3>
+            <p>Par ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('frogiedr0id.html','_blank')" tabindex="0">
+            <img src="https://play.frogiee.one/images/logo.gif" alt="Frogiedroid">
+            <h3>Frogiedroid</h3>
+            <p>Par ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://raw.githack.com/Shadowolfofficial/ageofwar-amazing-rope-police-amongus/main/amazing-rope-police/index.html','_blank')" tabindex="0">
+            <img src="https://raw.githack.com/Shadowolfofficial/ageofwar-amazing-rope-police-amongus/main/amazing-rope-police/splash.jpeg" alt="Amazing Strange Rope Police">
+            <h3>Amazing Strange Rope Police</h3>
+            <p>Par ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://zayaruzostreetorgan.com/editor/uploads/5/5/6/7/5567194/custom_themes/136734914403232081/drift_hunter.html','_blank')" tabindex="0">
+            <img src="./Logo apps/drift-hunters.png" alt="Drift Hunters">
+            <h3>Drift Hunters</h3>
+            <p>Par ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://gl.githack.com/3kh0/3kh0-assets/-/raw/main/Rocket-League/index.html','_blank')" tabindex="0">
+            <img src="https://gl.githack.com/3kh0/3kh0-assets/-/raw/main/Rocket-League/splash.png" alt="Rocket Soccer Derby">
+            <h3>ROCKET SOCCER DERBY</h3>
+            <p>Par ThunderOs éléments +GLab3kh0</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://raw.githack.com/Shadowolfofficial/geometryrash-jetpackjoyride-osu/main/geometryrash/index.html','_blank')" tabindex="0">
+            <img src="https://raw.githack.com/Shadowolfofficial/geometryrash-jetpackjoyride-osu/main/geometryrash/icon-128.png" alt="Geometry Rash">
+            <h3>Geometry Rash</h3>
+            <p>Par ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://raw.githack.com/Shadowolfofficial/geometryrash-jetpackjoyride-osu/main/jetpackjoyride/index.html','_blank')" tabindex="0">
+            <img src="https://raw.githack.com/Shadowolfofficial/geometryrash-jetpackjoyride-osu/main/jetpackjoyride/logo.jpeg" alt="Jetpack Joyride">
+            <h3>Jetpack Joyride</h3>
+            <p>Par ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://raw.githack.com/Shadowolfofficial/geometryrash-jetpackjoyride-osu/main/osu/index.html','_blank')" tabindex="0">
+            <img src="https://github.com/Shadowolfofficial/geometryrash-jetpackjoyride-osu/blob/main/osu/icon.png" alt="osu">
+            <h3>osu</h3>
+            <p>Par ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://raw.githack.com/Shadowolfofficial/Cars-Simulator/main/index.html','_blank')" tabindex="0">
+            <img src="https://raw.githack.com/Shadowolfofficial/Cars-Simulator/main/splash.png" alt="Cars Simulator">
+            <h3>Cars Simulator</h3>
+            <p>Original ThunderOs</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://raw.githack.com/Shadowolfofficial/madalin-stunt-cars-2/main/index.html','_blank')" tabindex="0">
+            <img src="https://raw.githack.com/Shadowolfofficial/madalin-stunt-cars-2/main/img/logo.jpg" alt="Madalin Stunt Cars 2">
+            <h3>Madalin Stunt Cars 2</h3>
+            <p>Original ThunderOs</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://raw.githack.com/Shadowolfofficial/madalin-stunt-cars-3/main/index.html','_blank')" tabindex="0">
+            <img src="https://raw.githack.com/Shadowolfofficial/madalin-stunt-cars-3/main/img/index.jpg" alt="Madalin Stunt Cars 3">
+            <h3>Madalin Stunt Cars 3</h3>
+            <p>Original ThunderOs</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://raw.githack.com/Shadowolfofficial/Popcat-classic/main/index.html','_blank')" tabindex="0">
+            <img src="https://raw.githack.com/Shadowolfofficial/Popcat-classic/main/android-chrome-192x192.png" alt="Popcat Classic">
+            <h3>Popcat Classic</h3>
+            <p>Original ThunderOs</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://raw.githack.com/Shadowolfofficial/ageofwar-amazing-rope-police-amongus/main/amongus/index.html','_blank')" tabindex="0">
+            <img src="https://raw.githack.com/Shadowolfofficial/ageofwar-amazing-rope-police-amongus/main/amongus/amgojs%5D_.png" alt="AmongUs">
+            <h3>AmongUs</h3>
+            <p>Par ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://raw.githack.com/Shadowolfofficial/Minecraft/precision-1.5.2/main/index.html','_blank')" tabindex="0">
+            <img src="https://raw.githack.com/Shadowolfofficial/Minecraft/precision-1.5.2/main/assetoverrides/title/bg/panorama0.png" alt="Minecraft Precision">
+            <h3>Minecraft Precision (Test)</h3>
+            <p>Par ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://raw.githack.com/Shadowolfofficial/basketrandom/main/index.html','_blank')" tabindex="0">
+            <img src="https://raw.githack.com/Shadowolfofficial/basketrandom/main/test.png" alt="Basket Random">
+            <h3>Basket Random</h3>
+            <p>Par ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://raw.githack.com/Shadowolfofficial/2drocketleague/main/index.html','_blank')" tabindex="0">
+            <img src="https://raw.githack.com/Shadowolfofficial/2drocketleague/main/unnamed.png" alt="Rocket League 2D">
+            <h3>Rocket League 2D</h3>
+            <p>Par ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://raw.githack.com/Shadowolfofficial/stickmanboost/main/index.html','_blank')" tabindex="0">
+            <img src="https://raw.githack.com/Shadowolfofficial/stickmanboost/main/base/img1.jpg" alt="Stickman Boost">
+            <h3>Stickman Boost</h3>
+            <p>Par ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://raw.githack.com/Shadowolfofficial/drift-bosss/main/index.html','_blank')" tabindex="0">
+            <img src="https://raw.githack.com/Shadowolfofficial/drift-bosss/main/drift-boss.png" alt="Drift Boss">
+            <h3>Drift Boss</h3>
+            <p>Par ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://raw.githack.com/Shadowolfofficial/death-run-3d/main/index.html','_blank')" tabindex="0">
+            <img src="https://raw.githack.com/Shadowolfofficial/death-run-3d/main/img/death.png" alt="Death Run 3D">
+            <h3>Death Run 3D</h3>
+            <p>Par ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://raw.githack.com/Shadowolfofficial/ageofwar-amazing-rope-police-amongus/main/ageofwar/index.html','_blank')" tabindex="0">
+            <img src="https://raw.githack.com/Shadowolfofficial/ageofwar-amazing-rope-police-amongus/main/ageofwar/warofage.jpg" alt="Age of War">
+            <h3>Age of War</h3>
+            <p>Par ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://assets.shuttlemath.com/subway-surfers-ny/','_blank')" tabindex="0">
+            <img src="./Logo apps/Subway-Surfersny.png" alt="Subway Surfers NY">
+            <h3>Subway Surfers New York</h3>
+            <p>Par ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://raw.githack.com/Shadowolfofficial/skibiditoiletattack/main/index.html','_blank')" tabindex="0">
+            <img src="https://raw.githack.com/Shadowolfofficial/skibiditoiletattack/main/logo.png" alt="Skibidi Toilet Attack">
+            <h3>Skibidi Toilet Attack</h3>
+            <p>Par ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://raw.githack.com/Shadowolfofficial/1v1lol/main/index.html','_blank')" tabindex="0">
+            <img src="https://raw.githack.com/Shadowolfofficial/1v1lol/main/splash.png" alt="1v1 LOL">
+            <h3>1v1 LOL</h3>
+            <p>Par ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://raw.githack.com/Shadowolfofficial/Real-Garbage-Truck/main/index.html','_blank')" tabindex="0">
+            <img src="./Logo apps/real-garbage-truck.png" alt="Real Garbage Truck">
+            <h3>Real Garbage Truck</h3>
+            <p>Par ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://raw.githack.com/Shadowolfofficial/Monster-Truck-Destroyer/main/index.html','_blank')" tabindex="0">
+            <img src="./Logo apps/monster-truck-destroyer.png" alt="Monster Truck Destroyer">
+            <h3>Monster Truck Destroyer</h3>
+            <p>Par ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://raw.githack.com/Shadowolfofficial/Earn-To-Die/main/index.html','_blank')" tabindex="0">
+            <img src="./Logo apps/earn-to-die.png" alt="Earn To Die">
+            <h3>Earn To Die</h3>
+            <p>Par ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://raw.githack.com/Shadowolfofficial/Truck-Trials/main/index.html','_blank')" tabindex="0">
+            <img src="./Logo apps/truck-trials.png" alt="Truck Trials">
+            <h3>Truck Trials</h3>
+            <p>Par ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://raw.githack.com/Shadowolfofficial/Impossible-Monster-Truck/main/index.html','_blank')" tabindex="0">
+            <img src="./Logo apps/impossible-monster-truck.png" alt="Impossible Monster Truck">
+            <h3>Impossible Monster Truck</h3>
+            <p>Par ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://raw.githack.com/Shadowolfofficial/Mad-Truck-Challenge/main/index.html','_blank')" tabindex="0">
+            <img src="./Logo apps/mad-truck-challenge.png" alt="Mad Truck Challenge">
+            <h3>Mad Truck Challenge</h3>
+            <p>Par ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://raw.githack.com/Shadowolfofficial/Fire-Truck-Rescue/main/index.html','_blank')" tabindex="0">
+            <img src="./Logo apps/Fire-Truck-Rescue.jpg" alt="Fire Truck Rescue">
+            <h3>Fire Truck Rescue</h3>
+            <p>Par ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://raw.githack.com/Shadowolfofficial/ThunderStore-appsfile/SoccerHeads/main/index.html','_blank')" tabindex="0">
+            <img src="./Logo apps/soccer-heads.png" alt="Soccer Heads">
+            <h3>Soccer Heads</h3>
+            <p>Par ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://raw.githack.com/Shadowolfofficial/Clash-of-Vikings/main/index.html','_blank')" tabindex="0">
+            <img src="./Logo apps/Clash of Vikings.jpg" alt="Clash of Vikings">
+            <h3>Clash of Vikings</h3>
+            <p>Par ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://raw.githack.com/Shadowolfofficial/wii-gba/main/index.html','_blank')" tabindex="0">
+            <img src="./Logo apps/Wii U.jpg" alt="Wii U">
+            <h3>Wii U</h3>
+            <p>Par ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://play.retrogames.onl/psx/resident-evil-3.html?m=1','_blank')" tabindex="0">
+            <img src="./Logo apps/resident-evil-3-nemesis.png" alt="Resident Evil 3 nemesis">
+            <h3>Resident Evil 3 nemesis</h3>
+            <p>Par emulatorgames</p>
+        </div>
+        <div class="app-card" onclick="window.open('/thundertv/index.html','_blank')" tabindex="0">
+            <img src="./Logo apps/thundertv.png" alt="ThunderTV">
+            <h3>ThunderTv</h3>
+            <p>Par ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://mangareader.to/home','_blank')" tabindex="0">
+            <img src="./Logo apps/mangareader.png" alt="Manga Reader TO">
+            <h3>Manga Reader TO (Pub Légère)</h3>
+            <p>Par ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://vostfree.in/','_blank')" tabindex="0">
+            <img src="https://vostfree.in/templates/Animix/images/favicon.ico" alt="VostFree">
+            <h3>VostFree</h3>
+            <p>Par ThunderOs éléments</p>
+        </div>
+        <div class="app-card" onclick="window.open('https://temp-mail.io/','_blank')" tabindex="0">
+            <img src="./Logo apps/tempmail.png" alt="TempMail">
+            <h3>TempMail</h3>
+            <p>Par ThunderOs éléments</p>
+        </div>
+        <!-- Fin des applications -->
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    </main>
+    <!-- Bouton site aléatoire -->
+    <button class="scroll-button" onclick="redirectToRandomLink()" title="Ouvrir un site externe au hasard">
+        <svg viewBox="0 0 24 24"><path d="M12 16.5l-8-8 1.41-1.42L12 13.67l6.59-6.59L20 8.5z"/></svg>
+    </button>
     <script>
-function saveMainDataToFile() {
-    try {
-        var mainSaveData = {
-            localStorage: btoa(JSON.stringify(Object.entries(localStorage))),
-            cookies: btoa(document.cookie)
-        };
-        var encryptedData = CryptoJS.AES.encrypt(JSON.stringify(mainSaveData), "egamepass").toString();
-        var blob = new Blob([encryptedData], { type: "application/octet-stream" });
-        var url = URL.createObjectURL(blob);
-        var a = document.createElement("a");
-        a.href = url;
-        a.download = "thundersaveapp.save";
-        document.body.appendChild(a);
-        a.click();
-        setTimeout(function() {
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
-        }, 0);
-        alert("Data saved successfully!");
-    } catch (error) {
-        console.error("Error during save:", error);
-        alert("An error occurred while saving the data.");
-    }
-}
-
-function restoreMainDataFromFile() {
-    var fileInput = document.createElement("input");
-    fileInput.type = "file";
-    fileInput.accept = ".save";
-    fileInput.style.display = "none";
-    document.body.appendChild(fileInput);
-
-    fileInput.addEventListener("change", function(event) {
-        var file = event.target.files[0];
-        var reader = new FileReader();
-
-        reader.onload = function() {
-            try {
-                var encryptedData = reader.result;
-                var decryptedData = CryptoJS.AES.decrypt(encryptedData, "egamepass").toString(CryptoJS.enc.Utf8);
-                console.log("Decrypted data:", decryptedData);  // Debug log
-
-                var mainSaveData = JSON.parse(decryptedData);
-
-                // Restore localStorage
-                var localStorageData = JSON.parse(atob(mainSaveData.localStorage));
-                for (var i = 0; i < localStorageData.length; i++) {
-                    localStorage.setItem(localStorageData[i][0], localStorageData[i][1]);
-                }
-
-                // Restore cookies
-                document.cookie = atob(mainSaveData.cookies);
-                alert("Data restored successfully!");
-            } catch (error) {
-                console.error("Error during restore:", error);
-                alert("An error occurred while restoring the data.");
-            }
-        };
-
-        reader.readAsText(file);
-    });
-
-    fileInput.click();
-}
+        // Message dynamique temps réel
+        function setDynamicMessage() {
+            const msg = document.getElementById('dynamic-msg');
+            const h = (new Date()).getHours();
+            let str = "";
+            if (h >= 0 && h < 5)
+                str = "Prenez soin de vous cette nuit&nbsp;!";
+            else if (h >= 5 && h < 8)
+                str = "Bonne énergie matinale, une belle journée s'annonce&nbsp;!";
+            else if (h >= 8 && h < 12)
+                str = "Excellente matinée, que tout réussisse&nbsp;!";
+            else if (h >= 12 && h < 14)
+                str = "Bon appétit&nbsp;! Profitez bien de votre après-midi&nbsp;!";
+            else if (h >= 14 && h < 18)
+                str = "Bonne après-midi à vous&nbsp;!";
+            else if (h >= 18 && h < 22)
+                str = "Belle soirée, profitez-en pour vous détendre&nbsp;!";
+            else
+                str = "Fin de soirée sereine, prenez soin de vous&nbsp;!";
+            msg.innerHTML = str;
+        }
+        setDynamicMessage();
+        setInterval(setDynamicMessage, 60*1000);
+        // Recherche
+        function searchApps() {
+            const keyword = document.getElementById('search').value.toLowerCase();
+            document.querySelectorAll('.apps-grid .app-card').forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const desc = card.querySelector('p').textContent.toLowerCase();
+                card.style.display = (title.includes(keyword) || desc.includes(keyword)) ? '' : 'none';
+            });
+        }
+        // Sites aléatoires
+        const links = [
+            "https://sz-games.com/",
+            "https://altsz.github.io/",
+            "https://mathstudys.github.io/",
+            "https://shuttlemath.com/",
+            "https://3kh0.org/",
+            "https://nowgg.me/"
+        ];
+        function redirectToRandomLink() {
+            const randomLink = links[Math.floor(Math.random() * links.length)];
+            window.open(randomLink, '_blank');
+        }
     </script>
 </body>
 </html>
