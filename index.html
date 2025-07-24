@@ -140,42 +140,6 @@
             0% {color:#5293f7;}
             100% {color:#51c6e8;}
         }
-        .scroll-button {
-            position: fixed;
-            bottom: 26px;
-            right: 25px;
-            width: 54px; height: 54px;
-            padding: 0;
-            background: var(--highlight);
-            color: #fff;
-            border: none;
-            border-radius: 100%;
-            box-shadow: 0 4px 18px #51c6e838;
-            cursor: pointer;
-            transition: background .2s, transform .2s;
-            z-index: 100;
-            display:flex;align-items:center;justify-content:center;
-        }
-        .scroll-button:hover {
-            background: #373faf;
-            transform: scale(1.07);
-        }
-        .scroll-button svg {
-            width: 32px;
-            height: 32px;
-            display: block;
-            fill: #fff;
-        }
-        @media (max-width: 850px) {
-            .apps-grid { padding: 18px 7vw 24px 7vw; max-width: none;gap:18px;}
-            header { flex-direction: column;align-items:flex-start;gap:10px;}
-            .search-box { margin-left:0; width:100%;max-width:100%;}
-        }
-        @media (max-width: 500px) {
-            .brand-title {font-size:1.05rem}
-            .apps-grid { grid-template-columns:1fr 1fr; padding: 12px 1vw;}
-            .app-card {padding:13px 4px;min-height:unset;}
-        }
     </style>
 </head>
 <body>
@@ -404,10 +368,6 @@
         <!-- Fin des applications -->
     </div>
     </main>
-    <!-- Bouton site aléatoire -->
-    <button class="scroll-button" onclick="redirectToRandomLink()" title="Ouvrir un site externe au hasard">
-        <svg viewBox="0 0 24 24"><path d="M12 16.5l-8-8 1.41-1.42L12 13.67l6.59-6.59L20 8.5z"/></svg>
-    </button>
     <script>
         // Message dynamique temps réel
         function setDynamicMessage() {
@@ -440,19 +400,6 @@
                 const desc = card.querySelector('p').textContent.toLowerCase();
                 card.style.display = (title.includes(keyword) || desc.includes(keyword)) ? '' : 'none';
             });
-        }
-        // Sites aléatoires
-        const links = [
-            "https://sz-games.com/",
-            "https://altsz.github.io/",
-            "https://mathstudys.github.io/",
-            "https://shuttlemath.com/",
-            "https://3kh0.org/",
-            "https://nowgg.me/"
-        ];
-        function redirectToRandomLink() {
-            const randomLink = links[Math.floor(Math.random() * links.length)];
-            window.open(randomLink, '_blank');
         }
     </script>
 </body>
