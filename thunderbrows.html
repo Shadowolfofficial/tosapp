@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <style>
         body {
             margin: 0;
@@ -25,48 +26,64 @@
             height: 100%;
             border: none;
         }
+
+        /* Bloc bloquant en haut */
+        .top-block {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 80px; /* ⬅ hauteur bloquée en haut */
+            background: transparent; /* invisible mais bloquant */
+            z-index: 10;
+        }
+
+        /* Bloc bloquant en bas */
+        .bottom-block {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 120px; /* ⬅ hauteur bloquée en bas */
+            background: transparent; /* invisible mais bloquant */
+            z-index: 10;
+        }
     </style>
+
     <script>
-        // Table de correspondance entre les codes cryptés et les URL réelles
         const urlMap = {
             "my1": "https://www.myinstants.com/fr/index/fr/",
             "s9age": "https://soundpage.pages.dev/",
             "vm0d": "https://tuna.voicemod.net/memes/"
         };
 
-        // Fonction pour récupérer les paramètres de l'URL
         function getQueryParam(param) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(param);
+            return new URLSearchParams(window.location.search).get(param);
         }
 
         document.addEventListener("DOMContentLoaded", () => {
-            // Récupérer le code crypté de l'URL
             const encryptedCode = getQueryParam('baseUrl');
-
-            // Décoder l'URL à partir du code ou utiliser une URL par défaut
             const baseUrl = urlMap[encryptedCode] || "https://www.oscobo.com/";
 
-            // Liste des liens disponibles avec l'URL décodée
             const links = [
-                "https://bnu.bg.geek.nz/view.html?app=" + baseUrl,
-                "https://axhrzqky.lightspeedsystems.help/view.html?app=" + baseUrl,
-                "https://bfywrzuc.bg.geek.nz/view.html?app=" + baseUrl
+                "https://bnu.bg.geek.nz/view.html?app=__SCRAMJET__" + baseUrl,
+                "https://axhrzqky.lightspeedsystems.help/view.html?app=__SCRAMJET__" + baseUrl,
+                "https://bfywrzuc.bg.geek.nz/view.html?app=__SCRAMJET__" + baseUrl
             ];
-            
-            // Charger un lien aléatoire dans l'iframe
-            const iframe = document.querySelector("iframe");
-            const randomLink = links[Math.floor(Math.random() * links.length)];
-            iframe.src = randomLink;
-            });
+
+            document.querySelector("iframe").src =
+                links[Math.floor(Math.random() * links.length)];
+        });
     </script>
 </head>
+
 <body>
     <div class="iframe-container">
         <iframe></iframe>
+
+        <!-- Zones bloquées -->
+        <div class="top-block"></div>
+        <div class="bottom-block"></div>
     </div>
 </body>
 </html>
-
-
-
